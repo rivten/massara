@@ -7,6 +7,28 @@ section .text
 
 global start
 extern kernel_main
+extern KeyboardHandlerMain
+
+ReadPort:
+	mov edx, [esp + 4]
+	in al, dx
+	ret
+
+WritePort:
+	mov edx, [esp + 4]
+	mov al, [esp + 4 + 4]
+	out dx, al
+	ret
+
+LoadIDT:
+	mov edx, [esp + 4]
+	lidt [edx]
+	sti
+	ret
+
+KeyboardHandler:
+	call KeyboardHandlerMain
+	iretd
 
 start:
 	cli
